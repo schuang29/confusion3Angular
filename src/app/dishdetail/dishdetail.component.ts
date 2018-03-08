@@ -18,6 +18,7 @@ export class DishdetailComponent implements OnInit {
     private location: Location) { }
 
   ngOnInit() {
+    // tslint:disable-next-line:prefer-const
     let id = +this.route.snapshot.params['id'];
     this.dish = this.dishservice.getDish(id);
   }
