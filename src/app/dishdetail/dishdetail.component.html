@@ -38,10 +38,54 @@
       <h3>Comments</h3>
       <md-list-item *ngFor="let comment of dish.comments">
         <p md-line>{{comment.comment}}</p>
-        <p md-line>{{comment.date | date}}</p>
+        <p md-line>{{comment.rating}} stars</p>
         <p md-line>-- {{comment.author}} {{comment.date | date}}</p>
       </md-list-item>
+
+      <div [hidden]="(feedbackForm.invalid)">
+          <md-list-item>
+              <p md-line>{{feedbackForm.comment}}</p>
+              <p md-line>{{feedbackForm.rating}} stars</p>
+              <p md-line>-- {{feedbackForm.author}}</p>
+            </md-list-item>
+      </div>
+      
     </md-list>
+
+    <div class="full-width">
+      <!-- To be removed, just for debugging -->
+      {{feedbackForm.value | json}} {{feedbackForm.status | json}}
+      <div [hidden]="(feedbackForm.invalid)">
+          <p>{{feedbackForm.comment}} <br>
+             {{feedbackForm.rating}} stars<br>
+             -- {{feedbackForm.author}}
+          </p>      
+      </div>
+      <!-- End remove for debug -->
+
+      <form novalidate [formGroup]="feedbackForm" (ngSubmit)="onSubmit()" #feedForm="ngForm">
+        <p>
+          <md-input-container class="full-width" dividerColor="{{formErrors.author ? 'warn': 'primary'}}">
+            <input mdInput placeholder="Name" formControlName="author" type="text" [(ngModel)]="feedbackForm.author" required>
+            <md-hint>
+              <span [hidden]="!(formErrors.author)">{{formErrors.author}}</span>
+            </md-hint>
+          </md-input-container>
+
+          <md-slider formControlName="rating" min="1" max="5" step="1" value="5" thumbLabel tickInterval="1" aria-label="rating" [(ngModel)]="feedbackForm.rating"></md-slider>
+
+          <md-input-container class="full-width">
+            <textarea mdInput placeholder="Your Comment" formControlName="comment" [(ngModel)]="feedbackForm.comment" required rows="12"></textarea>
+            <md-hint>
+              <span [hidden]="!(formErrors.comment)">{{formErrors.comment}}</span>
+            </md-hint>
+          </md-input-container>
+        </p>
+        
+        <button type="submit" md-button class="background-primary text-floral-white" [disabled]="feedbackForm.invalid">Submit</button>
+      </form>
+    </div>
+      
   </div>
   <div [hidden]="dish">
     <md-spinner></md-spinner> 
